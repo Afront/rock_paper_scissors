@@ -173,6 +173,14 @@ trait GameHandler {
     fn do_endless() {
         loop {
             Self::play_a_round();
+            if input::<String>()
+                .msg("Do you want to continue (Y/N)")
+                .get()
+                .to_uppercase()
+                == "Y"
+            {
+                break;
+            }
         }
     }
 
