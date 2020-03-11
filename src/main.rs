@@ -5,6 +5,10 @@
 // };
 //use promptly::prompt;
 //use tui::{backend::CrosstermBackend, Terminal};
+use rand::{
+    distributions::{Distribution, Standard},
+    Rng,
+};
 use read_input::prelude::*;
 use std::str::FromStr;
 
@@ -58,6 +62,16 @@ impl FromStr for Choice {
             "paper" | "p" => Ok(Choice::Paper),
             "scissors" | "s" => Ok(Choice::Scissors),
             _ => Err(ParseChoiceError::NotValidChoice),
+        }
+    }
+}
+
+impl Distribution<Choice> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Choice {
+        match rng.gen_range(0, 3) {
+            0 => Choice::Rock,
+            1 => Choice::Paper,
+            _ => Choice::Scissors,
         }
     }
 }
@@ -132,24 +146,14 @@ trait GameHandler {
         )
     }
 
-    // fn do_best() {
-    //     unimplemented!()
-    // }
-
-    // fn do_endless() {
-    //     loop {
-    //         play_a_round()
-    //     }
-    // }
-
-    fn do_race() {
-        let goal: i32 = input()
-            .msg("Please enter how much the player has to score in order to win: ")
+    fn do_best() {
+        let goal: u32 = input()
+            .msg("Please enter the amount of rounds in the game: ")
             .err("Please enter a valid number! ")
             .get();
         let mut score1 = 0;
         let mut score2 = 0;
-        while score1 < goal && score2 < goal {
+        while score1 < goal / 2 && score2 < goal / 2 {
             match Self::play_a_round() {
                 Player::First => {
                     score1 += 1;
@@ -165,11 +169,42 @@ trait GameHandler {
             };
         }
     }
+
+    fn do_endless() {
+        loop {
+            Self::play_a_round();
+        }
+    }
+
+    fn do_race() {
+        let goal: u32 = input()
+            .msg("Please enter how much the player has to score in order to win: ")
+            .err("Please enter a valid number! ")
+            .get();
+        let mut score1 = 0;
+        let mut score2 = 0;
+        while score1 < goal && score2 < goal {
+            match Self::play_a_round() {
+                Player::First => {
+                    score1 += 1;
+                    println!("You won!");
+                }
+                Player::Opponent => {
+                    score2 += 1;
+                    println!("You lost!");
+                }
+                Player::Tie => {
+                    println!("It's a tie!");
+                }
+            };
+        }
+    }
 }
 
 impl GameHandler for Computer {
     fn get_second_players_turn() -> Choice {
-        Choice::Rock
+        let mut rng = rand::thread_rng();
+        rng.gen()
     }
 }
 
