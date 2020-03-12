@@ -11,6 +11,7 @@ use rand::{
 };
 use read_input::prelude::*;
 use std::str::FromStr;
+use web_view::*;
 
 #[derive(Debug, PartialEq)]
 enum Player {
@@ -253,23 +254,52 @@ fn online() {
 }
 
 fn main() {
-    loop {
-        println!("Welcome to Rock Paper Scissors!");
-        println!("You can play against a (c)omputer, your (f)riend online, or a strange (o)nline!");
+    web_view::builder()
+        .title("Rock Paper Scissors")
+        .content(Content::Html(CONTENT))
+        .size(320, 480)
+        .resizable(true)
+        .debug(true)
+        .user_data(())
+        .invoke_handler(|_webview, _arg| Ok(()))
+        .run()
+        .unwrap();
+    /*    loop {
+            println!("Welcome to Rock Paper Scissors!");
+            println!("You can play against a (c)omputer, your (f)riend online, or a strange (o)nline!");
 
-        match input::<String>()
-            .msg("Which one do you prefer? (computer/friend/online): ")
-            .get()
-            .trim()
-            .to_uppercase()
-            .as_str()
-        {
-            "ABORT" | "EXIT" | "Q" | "QUIT" => abort(),
-            "HELP" | "H" => help(),
-            "COMPUTER" | "C" => computer(),
-            "FRIEND" | "F" => friend(),
-            "ONLINE" | "O" => online(),
-            _ => continue,
+            match input::<String>()
+                .msg("Which one do you prefer? (computer/friend/online): ")
+                .get()
+                .trim()
+                .to_uppercase()
+                .as_str()
+            {
+                "ABORT" | "EXIT" | "Q" | "QUIT" => abort(),
+                "HELP" | "H" => help(),
+                "COMPUTER" | "C" => computer(),
+                "FRIEND" | "F" => friend(),
+                "ONLINE" | "O" => online(),
+                _ => continue,
+            }
         }
-    }
+
+        Ok(())
+    */
 }
+
+const CONTENT: &str = r#"
+<html>
+    <body>
+        <style>
+            body {
+                overflow-x: hidden;
+                overflow-y: hidden;
+            }
+        </style>
+        <h1 class="hi">
+            Hello, World!
+        </h1>
+    </body>
+</html>
+"#;
