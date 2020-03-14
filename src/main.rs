@@ -290,16 +290,25 @@ fn main() {
 
 const CONTENT: &str = r#"
 <html>
-    <body>
+    <head>
         <style>
             body {
                 overflow-x: hidden;
                 overflow-y: hidden;
             }
         </style>
-        <h1 class="hi">
-            Hello, World!
-        </h1>
+        <script>
+            function changePage(page) {
+                window.location.pathname = page + ".html";
+            }
+        </script>
+    </head>
+    <body>
+        <p>Welcome to Rock Paper Scissors! Please select a mode:</p>
+        <button class="computer" onclick="changePage('computer')">Computer</button>
+        <button class="friend" onclick="changePage('friend')">Friend</button>
+        <button class="online" onclick="changePage('online')">Online</button>
+        
     </body>
 </html>
 "#;
