@@ -14,10 +14,7 @@ winres = "0.1.11"
 
 
 [dependencies]
-# crossterm = "0.16.0"
+neutrino = "0.3.1"
 rand = "0.7.3"
 read_input = "0.8.4"
-# tui = { version = "0.8", default-features = false, features = ['crossterm']}
-web-view = "0.5.4"
-
 

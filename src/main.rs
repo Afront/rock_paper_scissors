@@ -1,17 +1,14 @@
-// use crossterm::{
-//     event::{self, Event as CEvent, KeyCode},
-//     execute,
-//     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
-// };
-//use promptly::prompt;
-//use tui::{backend::CrosstermBackend, Terminal};
+use neutrino::widgets::button::Button;
+use neutrino::widgets::container::{Container, Direction};
+use neutrino::widgets::label::Label;
+
+use neutrino::{App, Window};
 use rand::{
     distributions::{Distribution, Standard},
     Rng,
 };
 use read_input::prelude::*;
 use std::str::FromStr;
-use web_view::*;
 
 #[derive(Debug, PartialEq)]
 enum Player {
@@ -254,16 +251,32 @@ fn online() {
 }
 
 fn main() {
-    web_view::builder()
-        .title("Rock Paper Scissors")
-        .content(Content::Html(CONTENT))
-        .size(320, 480)
-        .resizable(true)
-        .debug(true)
-        .user_data(())
-        .invoke_handler(|_webview, _arg| Ok(()))
-        .run()
-        .unwrap();
+    let mut label = Label::new("welcome");
+    label.set_text("Welcome to Rock Paper Scissors! Please choose a mode!");
+
+    let mut computer_button = Button::new("computer");
+    computer_button.set_text("Computer");
+
+    let mut friend_button = Button::new("friend");
+    friend_button.set_text("Friend");
+
+    let mut online_button = Button::new("online");
+    online_button.set_text("Online");
+
+    let mut root = Container::new("root");
+    root.set_direction(Direction::Vertical);
+    root.add(Box::new(label));
+    root.add(Box::new(computer_button));
+    root.add(Box::new(friend_button));
+    root.add(Box::new(online_button));
+
+    let mut window = Window::new();
+    window.set_title("Rock Paper Scissors");
+    window.set_size(320, 240);
+    window.set_child(Box::new(root));
+
+    App::run(window);
+
     /*    loop {
             println!("Welcome to Rock Paper Scissors!");
             println!("You can play against a (c)omputer, your (f)riend online, or a strange (o)nline!");
@@ -287,28 +300,3 @@ fn main() {
         Ok(())
     */
 }
-
-const CONTENT: &str = r#"
-<html>
-    <head>
-        <style>
-            body {
-                overflow-x: hidden;
-                overflow-y: hidden;
-            }
-        </style>
-        <script>
-            function changePage(page) {
-                window.location.pathname = page + ".html";
-            }
-        </script>
-    </head>
-    <body>
-        <p>Welcome to Rock Paper Scissors! Please select a mode:</p>
-        <button class="computer" onclick="changePage('computer')">Computer</button>
-        <button class="friend" onclick="changePage('friend')">Friend</button>
-        <button class="online" onclick="changePage('online')">Online</button>
-        
-    </body>
-</html>
-"#;
