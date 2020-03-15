@@ -270,10 +270,17 @@ fn main() {
     root.add(Box::new(friend_button));
     root.add(Box::new(online_button));
 
+    let style = r#"
+        #app {
+            background: red;
+        }
+    "#;
+
     let mut window = Window::new();
     window.set_title("Rock Paper Scissors");
     window.set_size(320, 240);
     window.set_child(Box::new(root));
+    window.set_style(style);
 
     App::run(window);
 
